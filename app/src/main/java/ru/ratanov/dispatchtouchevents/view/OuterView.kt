@@ -1,11 +1,9 @@
 package ru.ratanov.dispatchtouchevents.view
 
 import android.content.Context
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.FrameLayout
 import androidx.viewpager.widget.ViewPager
-import org.jetbrains.anko.toast
 import ru.ratanov.dispatchtouchevents.pager.SupportPagerAdapter
 
 class OuterView(context: Context) : FrameLayout(context) {
