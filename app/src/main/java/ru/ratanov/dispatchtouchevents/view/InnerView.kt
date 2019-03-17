@@ -36,8 +36,13 @@ class InnerView(context: Context) : LinearLayout(context) {
             }
 
             if (event.action == MotionEvent.ACTION_UP) {
-                button.isPressed = false
+                button.isPressed = true
                 button.performClick()
+                return true
+            }
+
+            if (event.action == MotionEvent.ACTION_MOVE) {
+                button.isPressed = false
                 return true
             }
         }

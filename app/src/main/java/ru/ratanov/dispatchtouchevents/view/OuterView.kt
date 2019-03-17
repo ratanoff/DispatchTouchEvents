@@ -25,10 +25,6 @@ class OuterView(context: Context) : FrameLayout(context) {
 
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        Log.d(TAG, "onTouchEvent")
-        return super.onTouchEvent(event)
-    }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
         return if (onInterceptTouchEvent(ev)) pager.onTouchEvent(ev) else innerView.onTouchEvent(ev)
@@ -46,8 +42,16 @@ class OuterView(context: Context) : FrameLayout(context) {
                 isMoving = false
                 dx = ev.x
                 dy = ev.y
+
+                intercept = false
+                return true
             }
-            MotionEvent.ACTION_MOVE -> isMoving = true
+            MotionEvent.ACTION_MOVE -> {
+                isMoving = true
+                intercept = true
+            }
+
+
             MotionEvent.ACTION_UP -> {
                 return !(!isMoving || Math.abs(ev.x - dx) < 10 && Math.abs(ev.y - dy) < 10)
             }
