@@ -15,8 +15,7 @@ class OuterView(context: Context) : FrameLayout(context) {
     private val innerView = InnerView(context)
 
     init {
-        layoutParams =
-            FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 
         addView(innerView)
         addView(pager)
@@ -25,7 +24,7 @@ class OuterView(context: Context) : FrameLayout(context) {
 
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        return if (onInterceptTouchEvent(ev)) pager.onTouchEvent(ev) else innerView.onTouchEvent(ev)
+        return if (onInterceptTouchEvent(ev)) pager.onTouchEvent(ev) else innerView.dispatchTouchEvent(ev)
     }
 
 
@@ -35,7 +34,7 @@ class OuterView(context: Context) : FrameLayout(context) {
     private var intercept = true
 
     override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        when(ev.action) {
+        when (ev.action) {
             MotionEvent.ACTION_DOWN -> {
                 isMoving = false
                 dx = ev.x

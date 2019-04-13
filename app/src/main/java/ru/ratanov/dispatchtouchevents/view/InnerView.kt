@@ -28,8 +28,7 @@ class InnerView(context: Context) : LinearLayout(context) {
 
     init {
         orientation = VERTICAL
-        layoutParams =
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
         gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
         addView(button1)
         addView(button2)
@@ -42,6 +41,8 @@ class InnerView(context: Context) : LinearLayout(context) {
         buttons.forEach { button ->
             if (event.action == MotionEvent.ACTION_UP && event.x in button.left..button.right && event.y in button.top..button.bottom) {
                 button.performClick()
+                button.isPressed = true
+                handler.postDelayed({ button.isPressed = false }, 200)
                 return true
             }
         }
