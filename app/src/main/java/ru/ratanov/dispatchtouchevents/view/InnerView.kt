@@ -1,9 +1,7 @@
 package ru.ratanov.dispatchtouchevents.view
 
 import android.content.Context
-import android.util.Log
 import android.view.Gravity
-import android.view.MotionEvent
 import android.widget.Button
 import android.widget.LinearLayout
 import org.jetbrains.anko.toast
@@ -21,7 +19,10 @@ class InnerView(context: Context) : LinearLayout(context) {
     private val button2 = Button(context).apply {
         val buttonText = "Button 2"
         text = buttonText
-        setOnClickListener { context.toast(buttonText) }
+        setOnTouchListener { v, event ->
+            context.toast("touched button 2")
+            true
+        }
     }
 
     private val buttons = arrayOf(button1, button2)
@@ -34,21 +35,6 @@ class InnerView(context: Context) : LinearLayout(context) {
         addView(button2)
     }
 
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        Log.d(TAG, "onTouchEvent = ${event.action}")
-
-        buttons.forEach { button ->
-            if (event.action == MotionEvent.ACTION_UP && event.x in button.left..button.right && event.y in button.top..button.bottom) {
-                button.performClick()
-                button.isPressed = true
-                handler.postDelayed({ button.isPressed = false }, 200)
-                return true
-            }
-        }
-
-        return super.onTouchEvent(event)
-    }
 
 
 }

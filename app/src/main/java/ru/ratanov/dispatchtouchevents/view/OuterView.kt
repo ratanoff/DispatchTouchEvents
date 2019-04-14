@@ -2,6 +2,7 @@ package ru.ratanov.dispatchtouchevents.view
 
 import android.content.Context
 import android.view.MotionEvent
+import android.view.ViewConfiguration
 import android.widget.FrameLayout
 import androidx.viewpager.widget.ViewPager
 import ru.ratanov.dispatchtouchevents.pager.SupportPagerAdapter
@@ -22,41 +23,35 @@ class OuterView(context: Context) : FrameLayout(context) {
 
     }
 
+    private var startX = 0f
+    private var startY = 0f
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
 
-    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        return if (onInterceptTouchEvent(ev)) pager.onTouchEvent(ev) else innerView.dispatchTouchEvent(ev)
-    }
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
 
+        if (event.action == MotionEvent.ACTION_UP) {
+            pager.dispatchTouchEvent(event)
+            innerView.dispatchTouchEvent(event)
+        }
 
-    private var dx = 0f
-    private var dy = 0f
-    private var isMoving = false
-    private var intercept = true
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            startX = event.x
+            startY = event.y
 
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
-        when (ev.action) {
-            MotionEvent.ACTION_DOWN -> {
-                isMoving = false
-                dx = ev.x
-                dy = ev.y
+            pager.dispatchTouchEvent(event)
+            innerView.dispatchTouchEvent(event)
+        }
 
-                intercept = false
-                return true
-            }
-            MotionEvent.ACTION_MOVE -> {
-                isMoving = true
-                intercept = true
-            }
-
-
-            MotionEvent.ACTION_UP -> {
-                return !(!isMoving || Math.abs(ev.x - dx) < 10 && Math.abs(ev.y - dy) < 10)
+        if (event.action == MotionEvent.ACTION_MOVE) {
+            if (Math.abs(event.x - startX) < touchSlop && Math.abs(event.y - startY) < touchSlop) {
+                innerView.dispatchTouchEvent(event)
+            } else {
+                pager.dispatchTouchEvent(   event)
             }
 
         }
 
-        return intercept
+        return true
     }
-
 
 }
