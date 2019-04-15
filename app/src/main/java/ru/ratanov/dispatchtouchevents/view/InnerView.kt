@@ -2,6 +2,7 @@ package ru.ratanov.dispatchtouchevents.view
 
 import android.content.Context
 import android.view.Gravity
+import android.view.MotionEvent
 import android.widget.Button
 import android.widget.LinearLayout
 import org.jetbrains.anko.toast
@@ -20,12 +21,12 @@ class InnerView(context: Context) : LinearLayout(context) {
         val buttonText = "Button 2"
         text = buttonText
         setOnTouchListener { v, event ->
-            context.toast("touched button 2")
+            if (event.action == MotionEvent.ACTION_UP) {
+                context.toast("touched button 2")
+            }
             true
         }
     }
-
-    private val buttons = arrayOf(button1, button2)
 
     init {
         orientation = VERTICAL
@@ -34,7 +35,5 @@ class InnerView(context: Context) : LinearLayout(context) {
         addView(button1)
         addView(button2)
     }
-
-
 
 }
